@@ -1,6 +1,12 @@
-import time, requests, os
+import time, requests, os, subprocess
 
 def check_server():
+	# create file if it does not exist
+	if not os.path.exists("last_timestamp.txt"):
+		with open("last_timestamp.txt", "w") as f:
+			f.write("0")
+
+	# read last timestamp
 	with open("last_timestamp.txt") as f:
 		last_timestamp = f.read()
 
@@ -9,20 +15,25 @@ def check_server():
 		"timestamp": last_timestamp
 	})
 
-	result = r.json()
+	if r.ok and r.text:
+		result = r.json()
+	else:
+		return
+
 	if result:
 		for submission in result:
 			images = submission[1]
 			categories = [x.split("_")[0] for x in images]
 			for category in categories:
+				# protect against code injection
+				assert category in ["bildung", "einkaufen", "freizeit", "gruenanlagen", "parks", "wasser"]
 				# print
-				# os.execl("lp", "-d", "POS58-USB", "-f", "--", category + ".png")
-				os.execl("echo", category + ".png")
+				os.system("lp -d POS58-USB -f " + category + ".png")
 
 		# store new timestamp
 		new_timestamp = result[-1][-1]
 		with open("last_timestamp.txt", "w") as f:
-			f.write(new_timestamp)
+			f.write(str(new_timestamp))
 
 if __name__ == '__main__':
 	# query server every second
