@@ -28,7 +28,7 @@ def check_server():
 				# protect against code injection
 				assert category in ["bildung", "einkaufen", "freizeit", "gruenanlagen", "parks", "wasser"]
 				# print
-				os.system("lp -d POS58-USB -f " + category + ".png")
+				os.system("lp -d POS58-USB " + category + ".png")
 
 		# store new timestamp
 		new_timestamp = result[-1][-1]
