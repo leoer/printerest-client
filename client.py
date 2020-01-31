@@ -8,12 +8,13 @@ def check_server():
 
 	# read last timestamp
 	with open("last_timestamp.txt") as f:
-		last_timestamp = f.read()
+            last_timestamp = f.read()
 
 	# ping server
 	r = requests.get("https://printerest.herokuapp.com/api", params={
 		"timestamp": last_timestamp
-	})
+		})
+	# print("json result", r.json())
 
 	if r.ok and r.text:
 		result = r.json()
@@ -26,9 +27,15 @@ def check_server():
 			categories = [x.split("_")[0] for x in images]
 			for category in categories:
 				# protect against code injection
-				assert category in ["bildung", "einkaufen", "freizeit", "gruenanlagen", "parks", "wasser"]
-				# print
-				os.system("lp -d POS58-USB " + category + ".png")
+				if category in ["bildung", "einkaufen", "freizeit", "gruenanlage", "parks", "wasser"]:
+					# print
+					# print("print", category)
+					try:
+						os.system("lp -d POS58-USB " + category + ".png")
+					except Exception as e:
+						print("failed to print", category, e)
+				else:
+					print(category, "doesn't exist")
 
 		# store new timestamp
 		new_timestamp = result[-1][-1]
