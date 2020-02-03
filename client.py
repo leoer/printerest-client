@@ -20,7 +20,7 @@ def check_server():
 		result = r.json()
 	else:
 		return
-
+	dir_path = os.path.dirname(__file__)
 	if result:
 		for submission in result:
 			images = submission[1]
@@ -31,7 +31,8 @@ def check_server():
 					# print
 					# print("print", category)
 					try:
-						os.system("lp -d POS58-USB " + category + ".png")
+						os.system("lp -d POS58-USB " + dir_path + "/" + category + ".png")
+						# os.system("lp -d HOP58-USB " + category + ".png")
 					except Exception as e:
 						print("failed to print", category, e)
 				else:
