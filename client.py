@@ -20,8 +20,7 @@ def check_server():
 		result = r.json()
 	else:
 		return
-	dir_path = os.path.dirname(__file__)
-        print(dir_path)
+	dir_path = os.path.dirname(os.path.realpath(__file__))
 	if result:
 		for submission in result:
 			images = submission[1]
