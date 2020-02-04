@@ -21,6 +21,7 @@ def check_server():
 	else:
 		return
 	dir_path = os.path.dirname(__file__)
+        print(dir_path)
 	if result:
 		for submission in result:
 			images = submission[1]
