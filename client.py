@@ -11,7 +11,8 @@ def check_server():
             last_timestamp = f.read()
 
 	# ping server
-	r = requests.get("https://printerest.herokuapp.com/api", params={
+	# r = requests.get("https://printerest.herokuapp.com/api", params={
+	r = requests.get("https://vota-berlin.herokuapp.com/api", params={
 		"timestamp": last_timestamp
 		})
 	# print("json result", r.json())
