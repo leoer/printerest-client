@@ -36,7 +36,7 @@ def check_server():
 			categories = [x.split("_")[0] for x in images]
 			for category in categories:
 				# protect against code injection
-				if category in ["bildung", "einkaufen", "freizeit", "gruenanlage", "parks", "wasser"]:
+				if category in ["unterhaltung", "mobilitaet", "inklusion", "sicherheit", "natur", "erholung", "gemeinschaft", "andere"]:
 					# print
 					# print("print", category)
 					try:
