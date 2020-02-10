@@ -1,6 +1,9 @@
-import time, requests, os, subprocess
+import time, requests, os, subprocess, sys
+from urllib3.exceptions import NewConnectionError
 
 def check_server():
+	print("Checking Server", file=sys.stderr)
+	
 	# create file if it does not exist
 	if not os.path.exists("last_timestamp.txt"):
 		with open("last_timestamp.txt", "w") as f:
@@ -12,10 +15,15 @@ def check_server():
 
 	# ping server
 	# r = requests.get("https://printerest.herokuapp.com/api", params={
-	r = requests.get("https://vota-berlin.herokuapp.com/api", params={
-		"timestamp": last_timestamp
-		})
-	# print("json result", r.json())
+	print("Accessing REST API", file=sys.stderr)
+	try:
+		r = requests.get("https://vota-berlin.herokuapp.com/api", params={
+			"timestamp": last_timestamp
+			})
+	except Exception as e:
+		print("[W]:", e, file=sys.stderr)
+		return
+	print("json result", r.json(), file=sys.stderr)
 
 	if r.ok and r.text:
 		result = r.json()
@@ -32,7 +40,7 @@ def check_server():
 					# print
 					# print("print", category)
 					try:
-						os.system("lp -d ZJ58-USB " + dir_path + "/" + category + ".png")
+						os.system("lp -d ZJ58-USB-2 " + dir_path + "/" + category + ".png")
 						# os.system("lp -d POS58-USB " + dir_path + "/" + category + ".png")
 						# os.system("lp -d HOP58-USB " + category + ".png")
 					except Exception as e:
@@ -53,3 +61,6 @@ if __name__ == '__main__':
 			check_server()
 		except Exception as e:
 			print(e)
+			sys.exit(1)
+
+# vim: set ts=4 sw=4 noet :
